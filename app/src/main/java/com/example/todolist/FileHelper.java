@@ -22,6 +22,7 @@ public class FileHelper {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(items);
             oos.close();
+            fos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -34,10 +35,11 @@ public class FileHelper {
         ArrayList<String> items = null;
         FileInputStream fis = null;
         try {
-            fis = new FileInputStream(FILENAME);
+            fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
             items = (ArrayList<String>) ois.readObject();
             ois.close();
+            fis.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

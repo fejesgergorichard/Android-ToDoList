@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private EditText itemET;
     private Button btn;
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn.setOnClickListener(this);
         // set an action listener for the ListView onItemClick
         itemsList.setOnItemClickListener(this);
+        itemsList.setOnItemLongClickListener(this);
     }
 
     /** Action listener for the 'ADD' button */
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.add_btn:
                 String enteredText = itemET.getText().toString();
+                if (enteredText.equals("")) {
+                    Toast.makeText(this, "Enter text to add.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 adapter.add(enteredText);
                 itemET.setText("");
                 FileHelper.writeData(items, this);
@@ -67,5 +72,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adapter.notifyDataSetChanged();
         FileHelper.writeData(items, this);
         Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        String text = "Long click on element: " + items.get(position);
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        return false;
     }
 }
