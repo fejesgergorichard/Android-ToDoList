@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn;
     private ListView itemsList;
 
-    private ArrayList<String> items;
+    private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter<String> adapter;
 
     @Override
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemsList = findViewById(R.id.items_list);
 
         // read the items from a file to an arraylist
-        items = FileHelper.readData(this);
+        items = (FileHelper.readData(this) == null) ? new ArrayList<String>() : FileHelper.readData(this);
         // put the arraylist in an arrayadapter
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         // put the arrayadapter's content into the itemsList ListView
@@ -55,9 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 itemET.setText("");
                 FileHelper.writeData(items, this);
                 Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
-                
-                break;
 
+                break;
         }
     }
 
