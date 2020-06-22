@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn;
     private ListView itemsList;
     private LinearLayout mainLayout;
+    private int elementID = 0;
 
     private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter<String> adapter;
@@ -73,7 +74,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 newText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 5));
 
                 CheckBox cb = new CheckBox(this);
+                elementID += 1;
                 cb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                cb.setId(elementID);
+                // set the onclick listener of the checkboxes
+                cb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean checked = ((CheckBox) v).isChecked();
+                        String toastString = "Completed task no. " + v.getId() + " parent: " + ((View) v.getParent()).getId();
+
+
+                        if (checked) {
+                            Toast.makeText(MainActivity.this, toastString, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
                 newLine.addView(newText);
                 newLine.addView(cb);
