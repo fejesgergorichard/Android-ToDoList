@@ -4,12 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText itemET;
     private Button btn;
     private ListView itemsList;
+    private LinearLayout mainLayout;
 
     private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter<String> adapter;
@@ -27,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainLayout = findViewById(R.id.layout_main);
 
         itemET = findViewById(R.id.item_edit_text);
         btn = findViewById(R.id.add_btn);
@@ -56,8 +65,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "Enter text to add.", Toast.LENGTH_SHORT).show();
                     break;
                 }
+                LinearLayout newLine = new LinearLayout(this);
+                newLine.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView newText = new TextView(this);
+                newText.setText(enteredText);
+                newText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 5));
+
+                CheckBox cb = new CheckBox(this);
+                cb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+
+                newLine.addView(newText);
+                newLine.addView(cb);
+                mainLayout.addView(newLine);
+
+                /*
                 adapter.add(enteredText);
-                itemET.setText("");
+                itemET.setText("");*/
                 FileHelper.writeData(items, this);
                 Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
 
