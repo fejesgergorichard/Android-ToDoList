@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,13 +10,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class FileHelper {
     public static final String FILENAME = "listinfo.dat";
 
-    /** Writes the passed ArrayList<String> object to a file */
-    public static void writeData(ArrayList<String> items, Context context) {
+    /** Writes the passed ArrayList<LinearLayout> object to a file */
+    public static void writeData(ArrayList<LinearLayout> items, Context context) {
         FileOutputStream fos = null;
         try {
             fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -30,14 +32,15 @@ public class FileHelper {
         }
     }
 
-    /** Reads the ArrayList<String> object from a file */
-    public static ArrayList<String> readData (Context context) {
-        ArrayList<String> items = null;
+
+    /** Reads the ArrayList<LinearLayout> object from a file */
+    public static ArrayList<LinearLayout> readData (Context context) {
+        ArrayList<LinearLayout> items = null;
         FileInputStream fis = null;
         try {
             fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            items = (ArrayList<String>) ois.readObject();
+            items = (ArrayList<LinearLayout>) ois.readObject();
             ois.close();
             fis.close();
 

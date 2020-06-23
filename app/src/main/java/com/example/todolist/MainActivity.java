@@ -17,15 +17,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private EditText itemET;
     private Button btn;
-    private ListView itemsList;
     private LinearLayout mainLayout;
-    private int elementID = 0;
 
-    private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private ArrayList<LinearLayout> views;
 
@@ -38,22 +35,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         itemET = findViewById(R.id.item_edit_text);
         btn = findViewById(R.id.add_btn);
-        itemsList = findViewById(R.id.items_list);
-
-        views = new ArrayList<LinearLayout>();
 
         // read the items from a file to an arraylist
-        items = (FileHelper.readData(this) == null) ? new ArrayList<String>() : FileHelper.readData(this);
-        // put the arraylist in an arrayadapter
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        // put the arrayadapter's content into the itemsList ListView
-        itemsList.setAdapter(adapter);
+        views = (FileHelper.readData(this) == null) ? new ArrayList<LinearLayout>() : FileHelper.readData(this);
+        System.out.println(views);
+        ListManager.redrawList(mainLayout, views);
 
         // set an action listener for the 'ADD' button
         btn.setOnClickListener(this);
-        // set an action listener for the ListView onItemClick
-        itemsList.setOnItemClickListener(this);
-        itemsList.setOnItemLongClickListener(this);
     }
 
     /** Action listener for the 'ADD' button */
@@ -66,41 +55,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "Enter text to add.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                LinearLayout newLine = new LinearLayout(this);
-                newLine.setOrientation(LinearLayout.HORIZONTAL);
 
-                TextView newText = new TextView(this);
-                newText.setText(enteredText);
-                newText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 5));
-
-                CheckBox cb = new CheckBox(this);
-                elementID += 1;
-                cb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-                cb.setId(elementID);
-                // set the onclick listener of the checkboxes
-                cb.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        boolean checked = ((CheckBox) v).isChecked();
-                        String toastString = "Completed task no. " + v.getId() + " parent: " + ((View) v.getParent()).getId();
-
-
-                        if (checked) {
-                            Toast.makeText(MainActivity.this, toastString, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-                newLine.addView(newText);
-                newLine.addView(cb);
-                mainLayout.addView(newLine);
-                views.add(newLine);
-
-
-                /*
-                adapter.add(enteredText);
-                itemET.setText("");*/
-                FileHelper.writeData(items, this);
+                views = ListManager.addTaskToLayout(mainLayout, enteredText, this, views);
+                FileHelper.writeData(views, this);
                 Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
 
                 break;
@@ -110,16 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /** Action listener for the ListView object's item click */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        items.remove(position);
-        adapter.notifyDataSetChanged();
-        FileHelper.writeData(items, this);
+        FileHelper.writeData(views, this);
         Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        String text = "Long click on element: " + items.get(position);
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-        return false;
     }
 }
