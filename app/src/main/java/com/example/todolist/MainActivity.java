@@ -15,9 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -30,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter<String> adapter;
+    private ArrayList<LinearLayout> views;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemET = findViewById(R.id.item_edit_text);
         btn = findViewById(R.id.add_btn);
         itemsList = findViewById(R.id.items_list);
+
+        views = new ArrayList<LinearLayout>();
 
         // read the items from a file to an arraylist
         items = (FileHelper.readData(this) == null) ? new ArrayList<String>() : FileHelper.readData(this);
@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 newLine.addView(newText);
                 newLine.addView(cb);
                 mainLayout.addView(newLine);
+                views.add(newLine);
+
 
                 /*
                 adapter.add(enteredText);
