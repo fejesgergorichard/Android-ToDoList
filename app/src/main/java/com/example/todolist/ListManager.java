@@ -56,7 +56,6 @@ public class ListManager {
         if (list.size() == 0) return;
 
         ArrayList<String> listCopy = (ArrayList<String>) list.clone();
-        addTaskToLayout(layout, "currentString", context);
 
         for (int i = 0; i < listCopy.size(); i++) {
             String currentString = listCopy.get(i);
