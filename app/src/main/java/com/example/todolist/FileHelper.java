@@ -17,7 +17,7 @@ public class FileHelper {
     public static final String FILENAME = "listinfo.dat";
 
     /** Writes the passed ArrayList<LinearLayout> object to a file */
-    public static void writeData(ArrayList<LinearLayout> items, Context context) {
+    public static void writeData(ArrayList<String> items, Context context) {
         FileOutputStream fos = null;
         try {
             fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -34,13 +34,13 @@ public class FileHelper {
 
 
     /** Reads the ArrayList<LinearLayout> object from a file */
-    public static ArrayList<LinearLayout> readData (Context context) {
-        ArrayList<LinearLayout> items = null;
+    public static ArrayList<String> readData (Context context) {
+        ArrayList<String> items = null;
         FileInputStream fis = null;
         try {
             fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            items = (ArrayList<LinearLayout>) ois.readObject();
+            items = (ArrayList<String>) ois.readObject();
             ois.close();
             fis.close();
 

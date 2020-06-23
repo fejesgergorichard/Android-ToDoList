@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout mainLayout;
 
     private ArrayAdapter<String> adapter;
-    private ArrayList<LinearLayout> views;
+    private ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn = findViewById(R.id.add_btn);
 
         // read the items from a file to an arraylist
-        views = (FileHelper.readData(this) == null) ? new ArrayList<LinearLayout>() : FileHelper.readData(this);
-        System.out.println(views);
-        ListManager.redrawList(mainLayout, views);
+        list = (FileHelper.readData(this) == null) ? new ArrayList<String>() : FileHelper.readData(this);
+        System.out.println(list);
+        ListManager.redrawList(this, mainLayout, list);
 
         // set an action listener for the 'ADD' button
         btn.setOnClickListener(this);
@@ -56,8 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
 
-                views = ListManager.addTaskToLayout(mainLayout, enteredText, this, views);
-                FileHelper.writeData(views, this);
+                ListManager.addTaskToLayout(mainLayout, enteredText, this);
+                list.add(enteredText);
+
+                FileHelper.writeData(list, this);
                 Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
 
                 break;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /** Action listener for the ListView object's item click */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        FileHelper.writeData(views, this);
+        FileHelper.writeData(list, this);
         Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
     }
 }

@@ -8,13 +8,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ListManager {
     private static int elementID = 0;
 
     /** Adds a new task (linear layout) to a layout */
-    public static ArrayList<LinearLayout> addTaskToLayout(LinearLayout layout, String text, final Context context, ArrayList<LinearLayout> views) {
+    public static void addTaskToLayout(LinearLayout layout, String text, final Context context) {
         // Create horizontal linear layout for the task
         LinearLayout newLine = new LinearLayout(context);
         newLine.setOrientation(LinearLayout.HORIZONTAL);
@@ -48,16 +49,18 @@ public class ListManager {
         newLine.addView(cb);
         // Add the elements to the layout
         layout.addView(newLine);
-        // Add the new line to the views ArrayList
-        views.add(newLine);
-
-        return views;
 
     }
 
-    public static void redrawList(LinearLayout layout, ArrayList<LinearLayout> list) {
-        for (LinearLayout currentLayout : list) {
-            layout.addView(currentLayout);
+    public static void redrawList(Context context, LinearLayout layout, ArrayList<String> list) {
+        if (list.size() == 0) return;
+
+        ArrayList<String> listCopy = (ArrayList<String>) list.clone();
+        addTaskToLayout(layout, "currentString", context);
+
+        for (int i = 0; i < listCopy.size(); i++) {
+            String currentString = listCopy.get(i);
+            addTaskToLayout(layout, currentString, context);
         }
     }
 
