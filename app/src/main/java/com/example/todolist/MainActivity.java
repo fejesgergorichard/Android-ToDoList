@@ -16,15 +16,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+
+    public static HashMap<Integer, String> list;
 
     private EditText itemET;
     private Button btn;
     private LinearLayout mainLayout;
 
     private ArrayAdapter<String> adapter;
-    private ArrayList<String> list;
+    private int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn = findViewById(R.id.add_btn);
 
         // read the items from a file to an arraylist
-        list = (FileHelper.readData(this) == null) ? new ArrayList<String>() : FileHelper.readData(this);
+        list = (FileHelper.readData(this) == null) ? new HashMap<Integer, String>() : FileHelper.readData(this);
         System.out.println(list);
         ListManager.redrawList(this, mainLayout, list);
 
@@ -57,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 ListManager.addTaskToLayout(mainLayout, enteredText, this);
-                list.add(enteredText);
+                id++;
+                list.put(id, enteredText);
 
                 FileHelper.writeData(list, this);
                 Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();

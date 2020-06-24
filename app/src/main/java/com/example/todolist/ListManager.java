@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ListManager {
     private static int elementID = 0;
@@ -36,10 +37,12 @@ public class ListManager {
             @Override
             public void onClick(View v) {
                 boolean checked = ((CheckBox) v).isChecked();
-                String toastString = "Completed task no. " + v.getId() + " parent: " + ((View) v.getParent()).getId();
+                int id = v.getId();
+                String toastString = "Completed task no. " + id + " parent: " + ((View) v.getParent()).getId();
 
                 if (checked) {
                     Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show();
+                    MainActivity.list.remove(id);
                 }
             }
         });
@@ -52,7 +55,7 @@ public class ListManager {
 
     }
 
-    public static void redrawList(Context context, LinearLayout layout, ArrayList<String> list) {
+    public static void redrawList(Context context, LinearLayout layout, HashMap<Integer, String> list) {
         if (list.size() == 0) return;
 
         ArrayList<String> listCopy = (ArrayList<String>) list.clone();
