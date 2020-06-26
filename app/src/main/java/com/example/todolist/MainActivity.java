@@ -21,10 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private EditText itemET;
     private Button btn;
-    private LinearLayout mainLayout;
-
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> list;
+    public static LinearLayout mainLayout;
+    public static ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
