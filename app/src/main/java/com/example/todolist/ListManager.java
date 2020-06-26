@@ -22,11 +22,11 @@ class ListManager {
         // Create text
         TextView newText = new TextView(context);
         newText.setText(text);
-        newText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 5));
+        newText.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 7));
 
         // Create checkbox
         CheckBox cb = new CheckBox(context);
-        cb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        cb.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         cb.setId(elementID);
 
         // Create onClickListener for the checkboxes
