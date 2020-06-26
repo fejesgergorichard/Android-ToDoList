@@ -16,12 +16,10 @@ public class ListManager {
 
     /** Adds a new task (linear layout) to a layout */
     public static void addTaskToLayout(LinearLayout layout, String text, final Context context) {
-        elementID += 1;
         // Create horizontal linear layout for the task
         LinearLayout newLine = new LinearLayout(context);
         newLine.setOrientation(LinearLayout.HORIZONTAL);
         newLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        newLine.setId(elementID);
 
         // Create text
         TextView newText = new TextView(context);
@@ -30,6 +28,7 @@ public class ListManager {
 
         // Create checkbox
         CheckBox cb = new CheckBox(context);
+        elementID += 1;
         cb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         cb.setId(elementID);
         // Create onClickListener for the checkboxes
@@ -41,10 +40,6 @@ public class ListManager {
 
                 if (checked) {
                     Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show();
-                    int taskID = v.getId();
-                    MainActivity.mainLayout.removeViewAt(taskID-1);
-                    MainActivity.list.remove(taskID-1);
-                    FileHelper.writeData(MainActivity.list, context);
                 }
             }
         });
