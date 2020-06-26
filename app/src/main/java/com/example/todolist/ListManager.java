@@ -2,6 +2,7 @@ package com.example.todolist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -31,19 +32,26 @@ class ListManager {
         // Create onClickListener for the checkboxes
         cb.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    // Create a toast
-                    String toastString = "Completed task no. " + v.getId();
-                    Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show();
+            public void onClick(final View v) {
+                // Delays the method for a specified amount of time to wait for the checkbox animation
+                long delayMillis = 500;
+                // New anonymus runnable class
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (((CheckBox) v).isChecked()) {
+                            // Create a toast
+                            String toastString = "Completed task no. " + v.getId();
+                            Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show();
 
-                    // Remove the checked element from the list
-                    MainActivity.list.remove(v.getId());
-                    // Redraw the whole list and save it to a file
-                    redrawList(context, layout, MainActivity.list);
-                    FileHelper.writeData(MainActivity.list, context);
-                }
+                            // Remove the checked element from the list
+                            MainActivity.list.remove(v.getId());
+                            // Redraw the whole list and save it to a file
+                            redrawList(context, layout, MainActivity.list);
+                            FileHelper.writeData(MainActivity.list, context);
+                        }
+                    }
+                }, delayMillis);
             }
         });
 
