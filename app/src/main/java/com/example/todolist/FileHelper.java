@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class FileHelper {
     public static final String FILENAME = "listinfo.dat";
 
     /** Writes the passed ArrayList<LinearLayout> object to a file */
-    public static void writeData(HashMap<Integer, String> items, Context context) {
+    public static void writeData(ArrayList<String> items, Context context) {
         FileOutputStream fos = null;
         try {
             fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -35,13 +36,13 @@ public class FileHelper {
 
 
     /** Reads the ArrayList<LinearLayout> object from a file */
-    public static HashMap<Integer, String> readData (Context context) {
-        HashMap<Integer, String> items = null;
+    public static ArrayList<String> readData (Context context) {
+        ArrayList<String> items = null;
         FileInputStream fis = null;
         try {
             fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            items = (HashMap<Integer, String>) ois.readObject();
+            items = (ArrayList<String>) ois.readObject();
             ois.close();
             fis.close();
 

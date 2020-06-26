@@ -4,15 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private EditText itemET;
     private Button btn;
-    public static LinearLayout mainLayout;
+    private LinearLayout mainLayout;
     public static ArrayList<String> list;
 
     @Override
@@ -33,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         itemET = findViewById(R.id.item_edit_text);
         btn = findViewById(R.id.add_btn);
+
 
         // read the items from a file to an arraylist
         list = (FileHelper.readData(this) == null) ? new ArrayList<String>() : FileHelper.readData(this);
@@ -54,12 +50,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
 
-                ListManager.addTaskToLayout(mainLayout, enteredText, this);
+                ListManager.addTaskToLayout(mainLayout, enteredText, this, list.size());
                 list.add(enteredText);
 
                 FileHelper.writeData(list, this);
                 Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
 
+                itemET.setText("");
                 break;
         }
     }

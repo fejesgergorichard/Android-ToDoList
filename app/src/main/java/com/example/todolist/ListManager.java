@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,17 +8,13 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ListManager {
-    private static int elementID = 0;
-
+class ListManager {
     /** Adds a new task (linear layout) to a layout */
-    public static void addTaskToLayout(LinearLayout layout, String text, final Context context) {
+     static void addTaskToLayout(final LinearLayout layout, String text, final Context context, int elementID) {
         // Create horizontal linear layout for the task
-        LinearLayout newLine = new LinearLayout(context);
+        final LinearLayout newLine = new LinearLayout(context);
         newLine.setOrientation(LinearLayout.HORIZONTAL);
         newLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -28,18 +25,24 @@ public class ListManager {
 
         // Create checkbox
         CheckBox cb = new CheckBox(context);
-        elementID += 1;
         cb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         cb.setId(elementID);
+
         // Create onClickListener for the checkboxes
         cb.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                boolean checked = ((CheckBox) v).isChecked();
-                String toastString = "Completed task no. " + v.getId() + " parent: " + ((View) v.getParent()).getId();
-
-                if (checked) {
+                if (((CheckBox) v).isChecked()) {
+                    // Create a toast
+                    String toastString = "Completed task no. " + v.getId();
                     Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show();
+
+                    // Remove the checked element from the list
+                    MainActivity.list.remove(v.getId());
+                    // Redraw the whole list and save it to a file
+                    redrawList(context, layout, MainActivity.list);
+                    FileHelper.writeData(MainActivity.list, context);
                 }
             }
         });
@@ -49,17 +52,19 @@ public class ListManager {
         newLine.addView(cb);
         // Add the elements to the layout
         layout.addView(newLine);
-
     }
 
-    public static void redrawList(Context context, LinearLayout layout, ArrayList<String> list) {
+    /** Redraws the whole list */
+    static void redrawList(Context context, LinearLayout layout, ArrayList<String> list) {
+        layout.removeAllViews(); // clear the view
         if (list.size() == 0) return;
-
+        // If the list is not empty, create a copy of it
         ArrayList<String> listCopy = (ArrayList<String>) list.clone();
 
+        // Add a linear layout to each String, with the id of i
         for (int i = 0; i < listCopy.size(); i++) {
             String currentString = listCopy.get(i);
-            addTaskToLayout(layout, currentString, context);
+            addTaskToLayout(layout, currentString, context, i);
         }
     }
 
