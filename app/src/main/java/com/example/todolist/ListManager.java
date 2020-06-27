@@ -5,12 +5,18 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import androidx.annotation.RequiresApi;
@@ -27,15 +33,22 @@ class ListManager {
         final TextView newText = new TextView(context);
         newText.setText(text);
         newText.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 7));
+
         // onClickListener for the texts
-         newText.setOnClickListener(new View.OnClickListener() {
-             @RequiresApi(api = Build.VERSION_CODES.M)
-             @Override
-             public void onClick(View v) {
-                 newText.setTextAppearance(android.R.style.Widget_DropDownItem);
-                 newText.setTextColor((newText.getCurrentTextColor() == Color.RED) ? Color.BLACK : Color.RED);
-             }
-         });
+        newText.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                // set the text color to red if its black and vice versa
+                newText.setTextColor((newText.getCurrentTextColor() == Color.RED) ? Color.BLACK : Color.RED);
+                String text = (String)newText.getText();
+                MainActivity.list.remove(text);
+                MainActivity.list.add(0, text);
+                redrawList(context, layout, MainActivity.list);
+                TextView child = (TextView)((LinearLayout)layout.getChildAt(0)).getChildAt(0);
+                child.setTextColor(Color.RED);
+            }
+        });
 
         // Create checkbox
         CheckBox cb = new CheckBox(context);
