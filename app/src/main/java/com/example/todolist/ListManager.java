@@ -2,6 +2,8 @@ package com.example.todolist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+
+import androidx.annotation.RequiresApi;
 
 class ListManager {
     /** Adds a new task (linear layout) to a layout */
@@ -20,9 +24,18 @@ class ListManager {
         newLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         // Create text
-        TextView newText = new TextView(context);
+        final TextView newText = new TextView(context);
         newText.setText(text);
         newText.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 7));
+        // onClickListener for the texts
+         newText.setOnClickListener(new View.OnClickListener() {
+             @RequiresApi(api = Build.VERSION_CODES.M)
+             @Override
+             public void onClick(View v) {
+                 newText.setTextAppearance(android.R.style.Widget_DropDownItem);
+                 newText.setTextColor((newText.getCurrentTextColor() == Color.RED) ? Color.BLACK : Color.RED);
+             }
+         });
 
         // Create checkbox
         CheckBox cb = new CheckBox(context);
@@ -34,7 +47,7 @@ class ListManager {
             @SuppressLint("ResourceType")
             public void onClick(final View v) {
                 // Delays the method for a specified amount of time to wait for the checkbox animation
-                long delayMillis = 500;
+                long delayMillis = 100;
                 // New anonymus runnable class
                 new Handler().postDelayed(new Runnable() {
                     @Override
